@@ -60,7 +60,7 @@ def carga_datos() -> Optional[Tuple[pd.DataFrame, nx.DiGraph]]:
 
     grafo = callejero.procesa_grafo(multidigrafo)
     print(f"Listo en {time.time() - inicio:.1f} s: {grafo.number_of_nodes()} cruces y "
-          f"{grafo.number_of_edges()} tramos de calle.\n")
+            f"{grafo.number_of_edges()} tramos de calle.\n")
     return direcciones, grafo
 
 
@@ -69,7 +69,7 @@ def muestra_ayuda(texto: str, catalogo: nav.CatalogoCalles) -> None:
     numeros = catalogo.numeros_cercanos(texto)
     if numeros is not None:
         print("  Esa calle existe, pero no ese número. Números cercanos: "
-              + ", ".join(map(str, numeros)))
+            + ", ".join(map(str, numeros)))
         return
 
     sugerencias = catalogo.sugerencias(texto)
@@ -82,7 +82,7 @@ def muestra_ayuda(texto: str, catalogo: nav.CatalogoCalles) -> None:
 
 
 def pide_direccion(etiqueta: str, direcciones: pd.DataFrame, catalogo: nav.CatalogoCalles,
-                   indice: nav.IndiceVertices) -> Optional[Tuple[str, object]]:
+                indice: nav.IndiceVertices) -> Optional[Tuple[str, object]]:
     """ Pide una dirección hasta que se escribe una que existe.
 
     Returns:
@@ -106,7 +106,7 @@ def pide_direccion(etiqueta: str, direcciones: pd.DataFrame, catalogo: nav.Catal
         vertice, distancia = indice.mas_cercano(latitud, longitud)
         if distancia > DISTANCIA_AVISO:
             print(f"  Aviso: la dirección está a {nav.formatea_distancia(distancia)} "
-                  f"del cruce más cercano accesible en coche.")
+                f"del cruce más cercano accesible en coche.")
         return texto, vertice
 
 
@@ -124,11 +124,11 @@ def pide_modo() -> nav.Modo:
 
 
 def muestra_ruta(grafo: nx.DiGraph, ruta: nav.Ruta, modo: nav.Modo,
-                 origen: str, destino: str) -> None:
+                origen: str, destino: str) -> None:
     """Escribe las instrucciones de la ruta y la dibuja sobre el callejero."""
     instrucciones = nav.instrucciones_ruta(grafo, ruta.vertices)
     resumen = (f"{nav.formatea_distancia(ruta.longitud)} · {nav.formatea_tiempo(ruta.tiempo)} · "
-               f"{ruta.consumo:.2f} L".replace(".", ","))
+            f"{ruta.consumo:.2f} L".replace(".", ","))
 
     print(f"\nRuta {modo.nombre} de {origen} a {destino}")
     print(f"{resumen}\n")

@@ -47,7 +47,7 @@ FuncionPeso = Union[Callable[[nx.Graph, object, object], float],
 
 
 def _dijkstra(G: Union[nx.Graph, nx.DiGraph], peso: FuncionPeso, origen: object,
-              destino: Optional[object] = None) -> Dict[object, object]:
+            destino: Optional[object] = None) -> Dict[object, object]:
     """ Algoritmo de Dijkstra desde "origen", según el pseudocódigo del tema 6. Si se
     indica "destino", se detiene en cuanto "destino" pasa a ser permanente (es lo
     único que necesita camino_minimo).
@@ -64,19 +64,19 @@ def _dijkstra(G: Union[nx.Graph, nx.DiGraph], peso: FuncionPeso, origen: object,
 
     Notas de implementación:
         - heapq no permite rebajar la prioridad de un elemento que ya está en el
-          montículo. Cuando d[v] mejora en el paso 2, se añade una entrada nueva y,
-          al sacar en el paso 1 una entrada de un vértice que ya es permanente, se
-          descarta (es una entrada obsoleta). El montículo puede llegar a tener m
-          entradas: el coste es O(m log m) = O(m log n), porque m <= n^2.
+            montículo. Cuando d[v] mejora en el paso 2, se añade una entrada nueva y,
+            al sacar en el paso 1 una entrada de un vértice que ya es permanente, se
+            descarta (es una entrada obsoleta). El montículo puede llegar a tener m
+            entradas: el coste es O(m log m) = O(m log n), porque m <= n^2.
         - En el paso 2 basta con mirar los vecinos de v_k que siguen en Tr: para
-          los demás vértices w(v_k v_j) = infinito y d[v_j] no cambia.
+            los demás vértices w(v_k v_j) = infinito y d[v_j] no cambia.
         - El algoritmo termina cuando el montículo se vacía: todos los vértices
-          alcanzables desde el origen son ya permanentes. Los no alcanzables nunca
-          entran (su d sigue siendo infinita), así que el árbol es el de la
-          componente del origen.
+            alcanzables desde el origen son ya permanentes. Los no alcanzables nunca
+            entran (su d sigue siendo infinita), así que el árbol es el de la
+            componente del origen.
         - El contador de desempate evita que, con dos distancias iguales, Python
-          compare los vértices: pueden ser de tipos no comparables entre sí
-          (p. ej. 1 y 'a') y daría TypeError.
+            compare los vértices: pueden ser de tipos no comparables entre sí
+            (p. ej. 1 y 'a') y daría TypeError.
 
     Raises:
         TypeError: si origen no es "hashable".
@@ -148,7 +148,7 @@ def dijkstra(G: Union[nx.Graph, nx.DiGraph], peso: FuncionPeso, origen: object) 
 
 
 def camino_minimo(G: Union[nx.Graph, nx.DiGraph], peso: FuncionPeso,
-                  origen: object, destino: object) -> List[object]:
+                origen: object, destino: object) -> List[object]:
     """ Calcula el camino mínimo desde el vértice origen hasta el vértice
     destino utilizando el algoritmo de Dijkstra.
 

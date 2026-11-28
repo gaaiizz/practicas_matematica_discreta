@@ -1,20 +1,3 @@
-"""
-callejero.py
-
-Matemática Discreta - IMAT
-ICAI, Universidad Pontificia Comillas
-
-Grupo: GP02A
-Integrantes:
-    - Carlos Fracaro Solo de Zaldívar
-    - Luis Adrián García Ruiz
-
-Descripción:
-Librería con herramientas y clases auxiliares necesarias para la representación de un callejero en un grafo.
-
-Complétese esta descripción según las funcionalidades agregadas por el grupo.
-"""
-
 import ast
 import math
 import re
@@ -122,7 +105,7 @@ def carga_callejero() -> pd.DataFrame:
         }, inplace=True)
 
         for col in ('clase', 'particula', 'nombre', 'numero'):
-            callejero[col] = callejero[col].str.strip().str.upper()
+            callejero[col] = callejero[col].fillna('').astype(str).str.strip().str.upper()
 
         callejero['latitud'] = callejero['latitud'].map(dms_a_decimal)
         callejero['longitud'] = callejero['longitud'].map(dms_a_decimal)
@@ -177,7 +160,7 @@ def busca_direccion(direccion: str, callejero: pd.DataFrame) -> tuple[float, flo
 
     clase = direccion_lista[0]  # toda clase es de longitud uno
 
-    available_particles = ('DE', 'DEL', 'DE LA', 'DE LOS', 'DE LAS', '', 'A LA', 'AL')
+    available_particles = ('DE', 'DEL', 'DE LA', 'DE LOS', 'DE LAS', 'A LA', 'AL', 'LA', 'LOS', 'LAS')
 
     cand_1 = direccion_lista[1] if direccion_lista[1] in available_particles else ''
     cand_2 = direccion_lista[2] if (cand_1 and len(direccion_lista) > 2) else ''
@@ -224,16 +207,15 @@ def determinar_particula(candidato_1: str, candidato_2: str, posibilidades: tupl
     concat = concat.strip()  # Evitamos espacios al final en caso de que candidato 2 venga vacío
 
     # Si la concatenación es una posibilidad, quiere decir que es la partícula de longitud 2
-    if concat in posibilidades:
+    if concat and concat in posibilidades:
         return (concat, 3)
 
     # Si no, miramos si el candidato uno es una posibilidad
-    elif candidato_1 in posibilidades:
+    elif candidato_1 and candidato_1 in posibilidades:
         return (candidato_1, 2)
 
     # Si no, es que no tenemos partícula
-    else:
-        return ('', 1)
+    return ('', 1)
 
 
 def determinar_nombre(direccion_lista: list[str]) -> tuple[str, str]:

@@ -268,7 +268,7 @@ class Ruta:
 
 
 def calcula_ruta(G: nx.DiGraph, origen: object, destino: object,
-                 peso: Callable[[nx.DiGraph, object, object], float]) -> Ruta:
+                peso: Callable[[nx.DiGraph, object, object], float]) -> Ruta:
     """ Calcula con grafo_pesado el camino mínimo de origen a destino para la función de peso
     dada, y sus totales de distancia, tiempo y consumo.
 
@@ -472,7 +472,7 @@ def une_continuaciones(trazado: Trazado, tramos: List[Tramo]) -> List[Tramo]:
         if (anterior is not None and not anterior.rotonda and not tramo.rotonda
                 and misma_via(anterior.nombre, tramo.nombre)):
             angulo = angulo_giro(trazado.rumbo_llegada(tramo.inicio),
-                                 trazado.rumbo_salida(tramo.vertice_giro))
+                                trazado.rumbo_salida(tramo.vertice_giro))
             if abs(angulo) < LIMITE_RECTO:
                 anterior.une(tramo)
                 continue
@@ -487,7 +487,7 @@ def une_plazas_de_paso(trazado: Trazado, tramos: List[Tramo]) -> List[Tramo]:
     """
     def recto(tramo: Tramo) -> bool:
         return abs(angulo_giro(trazado.rumbo_llegada(tramo.inicio),
-                               trazado.rumbo_salida(tramo.vertice_giro))) < LIMITE_RECTO
+                            trazado.rumbo_salida(tramo.vertice_giro))) < LIMITE_RECTO
 
     tramos = list(tramos)
     j = 1
@@ -506,7 +506,7 @@ def une_plazas_de_paso(trazado: Trazado, tramos: List[Tramo]) -> List[Tramo]:
 
 
 def divide_giros_misma_via(G: nx.DiGraph, vertices: Sequence[object],
-                           trazado: Trazado, tramos: List[Tramo]) -> List[Tramo]:
+                        trazado: Trazado, tramos: List[Tramo]) -> List[Tramo]:
     """ Divide un tramo en los cruces donde la ruta gira sin cambiar de calle.
 
     Solo se divide si en ese cruce hay otra opción (si no, es una simple curva
@@ -541,7 +541,7 @@ def divide_giros_misma_via(G: nx.DiGraph, vertices: Sequence[object],
             # DISTANCIA_RUMBO metros mezcla los dos giros y los atenúa.
             doble, k = None, i + 1
             while k < actual.fin and (trazado.posicion_vertice[k]
-                                      - trazado.posicion_vertice[i]) < TRAMO_CORTO:
+                                    - trazado.posicion_vertice[i]) < TRAMO_CORTO:
                 doble = zigzag(trazado, i, k)
                 if doble:
                     break
@@ -557,7 +557,7 @@ def divide_giros_misma_via(G: nx.DiGraph, vertices: Sequence[object],
             primera = Tramo(actual.nombre, actual.inicio, i, actual.longitud * proporcion,
                             False, set(actual.tipos), actual.giro_hasta, actual.zigzag)
             actual = Tramo(actual.nombre, i, actual.fin, actual.longitud * (1 - proporcion),
-                           False, set(actual.tipos), zigzag=doble)
+                        False, set(actual.tipos), zigzag=doble)
             resultado.append(primera)
             i = k + 1 if doble else i + 1
         resultado.append(actual)
@@ -656,19 +656,19 @@ class GeneradorInstrucciones:
 
         base = "el enlace" if es_enlace(tramo) else "la vía sin nombre"
         siguiente = next((t.nombre for t in self.tramos[j + 1:]
-                          if t.nombre != callejero.NOMBRE_DESCONOCIDO), None)
+                        if t.nombre != callejero.NOMBRE_DESCONOCIDO), None)
         return f"{base} hacia {siguiente}" if siguiente else base
 
     # --- Maniobras ---
 
     def angulo_entrada(self, tramo: Tramo) -> float:
         return angulo_giro(self.trazado.rumbo_llegada(tramo.inicio),
-                           self.trazado.rumbo_salida(tramo.vertice_giro))
+                        self.trazado.rumbo_salida(tramo.vertice_giro))
 
     def hay_semaforo(self, tramo: Tramo) -> bool:
         """True si hay un semáforo en el cruce donde se entra en el tramo."""
         return any(self.G.nodes[self.vertices[i]].get("highway") == "traffic_signals"
-                   for i in range(tramo.inicio, tramo.vertice_giro + 1))
+                for i in range(tramo.inicio, tramo.vertice_giro + 1))
 
     def salida_autovia(self, j: int) -> Optional[str]:
         """ Si el tramo j-ésimo sale de una autovía, número de la salida ("" si no se conoce).
@@ -774,7 +774,7 @@ class GeneradorInstrucciones:
         vecinas = [self.tramos[k].nombre for k in (j - 1, j + 1) if 0 <= k < len(self.tramos)]
         # El nombre de la rotonda solo se menciona si es propio (no el de una calle que llega a ella)
         nombre_propio = (tramo.nombre != callejero.NOMBRE_DESCONOCIDO
-                         and not any(misma_via(tramo.nombre, v) for v in vecinas))
+                        and not any(misma_via(tramo.nombre, v) for v in vecinas))
         nombre = f" ({tramo.nombre})" if nombre_propio else ""
 
         if j + 1 >= len(self.tramos):  # el destino está en la propia rotonda
@@ -782,7 +782,7 @@ class GeneradorInstrucciones:
 
         salida = self.cuenta_salidas_rotonda(tramo)
         texto = (f"En la rotonda{nombre}, toma la {ordinal(salida)} salida "
-                 f"hacia {self.nombre_mostrado(j + 1)}")
+                f"hacia {self.nombre_mostrado(j + 1)}")
         return texto, self.tramos[j + 1].longitud, tramo.inicio, j + 2
 
 
